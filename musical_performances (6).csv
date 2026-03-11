@@ -1,0 +1,81 @@
+package model;
+
+/**
+ * Κλάση που αναπαριστά έναν πελάτη.
+ * Περιέχει τον κωδικό και το όνομα του.
+ */
+public class Customer {
+    private String customerId;
+    private String customerName;
+
+    /**
+     * Προεπιλεγμένος κατασκευαστής χωρίς παραμέτρους.
+     */
+    public Customer() {
+
+    }
+
+    /**
+     * Κατασκευαστής με παραμέτρους για αρχικοποίηση πελάτη.
+     *
+     * @param customerId Κωδικός πελάτη.
+     * @param customerName Όνομα πελάτη.
+     */
+    public Customer(String customerId, String customerName) {
+        this.customerId = customerId;
+        this.customerName = customerName;
+    }
+
+    /**
+     * Επιστρέφει τον κωδικό του πελάτη.
+     *
+     * @return Ο κωδικός πελάτη.
+     */
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    /**
+     * Ορίζει τον κωδικό του πελάτη.
+     *
+     * @param customerId Νέος κωδικός πελάτη.
+     */
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    /**
+     * Επιστρέφει το όνομα του πελάτη.
+     *
+     * @return Το όνομα πελάτη.
+     */
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    /**
+     * Ορίζει το όνομα του πελάτη.
+     *
+     * @param customerName Το νέο όνομα πελάτη.
+     */
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    /**
+     * Επιστρέφει μια συμβολοσειρά που περιγράφει τον πελάτη.
+     *
+     * @return Μορφοποιημένη συμβολοσειρά με κωδικό και όνομα πελάτη.
+     */
+    @Override
+    public String toString() {
+        return "Κωδικός πελάτη: " + customerId + ", Όνομα πελάτη: " + customerName;
+    }
+
+    public String toCsvLine ()
+    {
+        String Lin = customerId + "," + customerName;
+        return Lin;
+    }
+}

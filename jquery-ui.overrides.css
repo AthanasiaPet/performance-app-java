@@ -1,0 +1,240 @@
+package model;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * Η κλάση ReservationManager διαχειρίζεται τις κρατήσεις παραστάσεων.
+ * Υποστηρίζει τη δημιουργία νέας κράτησης και την εμφάνιση όλων των κρατήσεων
+ * μέσω μενού αλληλεπίδρασης με τον χρήστη.
+ */
+public class ReservationManager {
+    private Scanner scanner;
+    private ArrayList <Reservation> allReservations; //λίστα κρατήσεων θεατρικών και μουσικών παραστάσεων
+
+
+    /**
+     * Κατασκευαστής της κλάσης ReservationManager.
+     * Αρχικοποιεί το scanner και τη λίστα κρατήσεων.
+     */
+    public ReservationManager() {
+        scanner = new Scanner(System.in);
+        allReservations = new ArrayList<Reservation>();
+    }
+
+    /**
+     * Εμφανίζει το βασικό μενού διαχείρισης κρατήσεων.
+     * Επιτρέπει στον χρήστη να προσθέσει νέα κράτηση ή να δει υπάρχουσες.
+     */
+    public void reservationMenu() {
+        int choice;
+        do {
+            System.out.println("\n===ΔΙΑΧΕΙΡΙΣΗ ΚΡΑΤΗΣΕΩΝ===");
+            System.out.println("1. Νέα κράτηση");
+            System.out.println("2. Εμφάνιση κρατήσεων");
+            System.out.println("3. Στατιστικά κρατήσεων");
+            System.out.println("4. Έξοδος από το μενού");
+            System.out.println("Παρακαλώ επιλέξτε μια ενέργεια");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addReservationByType();
+                    break;
+                case 2:
+                    showReservationByType();
+                    break;
+                case 3:
+                    showReservationStatistics();
+                    break;
+                case 4:
+                    System.out.println("Έξοδος από το μενού.");
+                    break;
+                default:
+                    System.out.println("Μη έγκυρη επιλογή.");
+
+            }
+
+        } while (choice != 4);
+    }
+
+    /**
+     * Εμφανίζει υπομενού για επιλογή είδους κράτησης (θεατρική ή μουσική)
+     * και καλεί την αντίστοιχη μέθοδο εισαγωγής.
+     */
+    public void addReservationByType() {
+        System.out.println("Επιλέξτε είδος παράστασης:");
+        System.out.println("1. Θεατρική");
+        System.out.println("2. Μουσική");
+        int subChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (subChoice == 1) {
+            addTheatricalReservation();
+        } else if (subChoice == 2) {
+            addMusicalReservation();
+        } else {
+            System.out.println("Μη έγκυρη επιλογή.");
+        }
+    }
+
+    /**
+     * Εμφανίζει υπομενού επιλογής είδους προβολής κρατήσεων
+     * (θεατρικές, μουσικές ή όλες).
+     */
+    public void showReservationByType() {
+        System.out.println("Επιλέξτε είδος παράστασης:");
+        System.out.println("1. Θεατρική");
+        System.out.println("2. Μουσική");
+        System.out.println("3. Όλες");
+        int subChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (subChoice == 1) {
+            showTheatricalReservation();
+        } else if (subChoice == 2) {
+            showMusicalReservation();
+        } else if (subChoice == 3) {
+            showAllReservation();
+        } else {
+            System.out.println("Μη έγκυρη επιλογή.");
+        }
+
+    }
+
+    /**
+     * Εισάγει νέα κράτηση θεατρικής παράστασης αφού ζητήσει από τον χρήστη:
+     * - Κωδικό κράτησης
+     * - Κωδικό πελάτη
+     * - Κωδικό παράστασης
+     * - Αριθμό θέσεων
+     */
+    public void addTheatricalReservation() {
+        System.out.println("===ΝΕΑ ΚΡΑΤΗΣΗ ΘΕΑΤΡΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό κράτησης: ");
+        String reservationId = scanner.nextLine();
+        for (Reservation tmp : allReservations) {
+            if (tmp.getReservationId().equals(reservationId)) {
+                System.out.println("Υπάρχει ήδη κράτηση με αυτόν τον κωδικό. ");
+                return;
+            }
+        }
+        System.out.println("Εισάγετε κωδικό πελάτη: ");
+        String customerId = scanner.nextLine();
+        System.out.println("Εισάγετε κωδικό θεατρικής παράστασης: ");
+        String performanceId = scanner.nextLine();
+        System.out.println("Εισάγετε αριθμό θέσεων: ");
+        int seats = scanner.nextInt();
+        scanner.nextLine();
+
+        TheatricalReservation tmp = new TheatricalReservation(reservationId, customerId, performanceId, seats);
+        allReservations.add(tmp);
+        System.out.println("Επιτυχής εισαγωγή!");
+    }
+
+    /**
+     * Εισάγει νέα κράτηση μουσικής παράστασης με παρόμοια διαδικασία.
+     */
+    public void addMusicalReservation() {
+        System.out.println("===ΝΕΑ ΚΡΑΤΗΣΗ ΜΟΥΣΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό κράτησης: ");
+        String reservationId = scanner.nextLine();
+        for (Reservation tmp : allReservations) {
+            if (tmp.getReservationId().equals(reservationId)) {
+                System.out.println("Υπάρχει ήδη κράτηση με αυτόν τον κωδικό. ");
+                return;
+            }
+        }
+        System.out.println("Εισάγετε κωδικό πελάτη: ");
+        String customerId = scanner.nextLine();
+        System.out.println("Εισάγετε κωδικό μουσικής παράστασης: ");
+        String performanceId = scanner.nextLine();
+        System.out.println("Εισάγετε αριθμό θέσεων: ");
+        int seats = scanner.nextInt();
+        scanner.nextLine();
+
+        MusicalReservation tmp = new MusicalReservation(reservationId, customerId, performanceId, seats);
+        allReservations.add(tmp);
+        System.out.println("Επιτυχής εισαγωγή!");
+    }
+
+    /**
+     * Εμφανίζει όλες τις κρατήσεις.
+     */
+    public void showAllReservation() {
+        if (allReservations.isEmpty()) {
+            System.out.println("Δεν υπάρχουν κρατήσεις.");
+        } else {
+            for (Reservation tmp: allReservations) {
+                System.out.println(tmp.toString());
+            }
+        }
+
+    }
+
+    /**
+     * Εμφανίζει μόνο τις κρατήσεις θεατρικών παραστάσεων.
+     */
+    public void showTheatricalReservation() {
+        boolean found = false;
+        for (Reservation r: allReservations) {
+            if (r instanceof TheatricalReservation) {
+                System.out.println(r.toString());
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν υπάρχουν κρατήσεις θεατρικών παραστάσεων.");
+        }
+    }
+
+    /**
+     * Εμφανίζει μόνο τις κρατήσεις μουσικών παραστάσεων.
+     */
+    public void showMusicalReservation() {
+        boolean found = false;
+        for (Reservation r: allReservations) {
+            if (r instanceof MusicalReservation) {
+                System.out.println(r.toString());
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν υπάρχουν κρατήσεις μουσικών παραστάσεων.");
+        }
+    }
+
+    /**
+     * Εμφανίζει στατιστικά στοιχεία σχετικά με τις κρατήσεις.
+     * Υπολογίζει και παρουσιάζει τον συνολικό αριθμό των κρατήσεων για θεατρικές
+     * και μουσικές παραστάσεις, καθώς και το συνολικό πλήθος των θέσεων που έχουν
+     * κρατηθεί για κάθε τύπο παράστασης.
+     */
+    public void showReservationStatistics() {
+        int theatricalCount = 0;
+        int theatricalSeatsCount = 0;
+        int musicalCount = 0;
+        int musicalSeatsCount = 0;
+        System.out.println("Στατιστικά κρατήσεων θεατρικών παραστάσεων:");
+        for (Reservation tmp: allReservations) {
+            if (tmp instanceof TheatricalReservation) {
+                theatricalCount++;
+                theatricalSeatsCount = theatricalSeatsCount + tmp.getSeats();
+            } else if (tmp instanceof MusicalReservation) {
+                musicalCount++;
+                musicalSeatsCount = musicalSeatsCount + tmp.getSeats();
+            }
+        }
+        System.out.println("\n=== ΣΤΑΤΙΣΤΙΚΑ ΚΡΑΤΗΣΕΩΝ ===");
+        System.out.println("Θεατρικές παραστάσεις:");
+        System.out.println("Αριθμός κρατήσεων: " + theatricalCount);
+        System.out.println("Συνολικός αριθμός θέσεων: " + theatricalSeatsCount);
+        System.out.println("Μουσικές παραστάσεις:");
+        System.out.println("Αριθμός κρατήσεων: " + musicalCount);
+        System.out.println("Συνολικός αριθμός θέσεων: " + musicalSeatsCount);
+
+    }
+
+
+}

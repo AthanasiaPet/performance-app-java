@@ -1,0 +1,205 @@
+package model;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Η κλάση CustomerManager παρέχει λειτουργίες για τη διαχείριση πελατών,
+ * όπως εισαγωγή, επεξεργασία και διαγραφή.
+ */
+public class CustomerManager {
+    Scanner scanner;
+    private ArrayList<Customer> allCustomers;
+
+
+    public CustomerManager() {
+        scanner = new Scanner(System.in);
+        allCustomers = new ArrayList<Customer>();
+    }
+
+    /**
+     * Εμφανίζει το μενού διαχείρισης πελατών και χειρίζεται την αλληλεπίδραση με τον χρήστη.
+     */
+    public void customerMenu() {
+        int choice;
+
+        do {
+            System.out.println("\n===ΔΙΑΧΕΙΡΙΣΗ ΠΕΛΑΤΩΝ===");
+            System.out.println("1. Εισαγωγή Πελατών");
+            System.out.println("2. Επεξεργασία Πελατών");
+            System.out.println("3. Διαγραφή Πελατών");
+            System.out.println("4. Εμφάνιση πελατών");
+            System.out.println("0. Έξοδος");
+            System.out.print("Παρακαλώ επιλέξτε μια ενέργεια ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addCustomer();
+                    break;
+                case 2:
+                    editCustomer();
+                    break;
+                case 3:
+                    deleteCustomer();
+                    break;
+                case 4:
+                    showAllCustomers();
+                    break;
+                case 0:
+                    System.out.println("Έξοδος από το μενού.");
+                    break;
+                default:
+                    System.out.println("Μη έγκυρη επιλογή.");
+
+            }
+
+        } while (choice != 0);
+    }
+
+    /**
+     * Προσθέτει νέο πελάτη στη λίστα.
+     * Ζητάει από τον χρήστη να εισάγει κωδικό και όνομα πελάτη.
+     * Ελέγχει αν υπάρχει ήδη πελάτης με τον ίδιο κωδικό για αποφυγή διπλοεγγραφών.
+     * Αν όλα είναι σωστά, προσθέτει τον πελάτη στη λίστα.
+     */
+    public void addCustomer() {
+        System.out.println("===Εισαγωγή πελάτη===");
+        System.out.println("Εισάγετε κωδικό πελάτη: ");
+        String customerId = scanner.nextLine();
+        for (Customer tmp : allCustomers) {
+            if (tmp.getCustomerId().equals(customerId)) {
+                System.out.println("Υπάρχει ήδη πελάτης με αυτόν τον κωδικό ");
+                return;
+            }
+        }
+        System.out.print("Εισάγετε όνομα πελάτη: ");
+        String customerName = scanner.nextLine();
+        Customer tmp = new Customer(customerId, customerName);
+        allCustomers.add(tmp);
+        System.out.println("Επιτυχής εισαγωγή! \n ");
+
+    }
+
+    /**
+     * Επεξεργάζεται τα στοιχεία πελάτη με βάση τον κωδικό.
+     * Ζητάει από τον χρήστη τον κωδικό πελάτη και αν βρεθεί,
+     * του επιτρέπει να αλλάξει το όνομα πελάτη.
+     * Ενημερώνει τον χρήστη για επιτυχία ή αποτυχία.
+     */
+    public void editCustomer() {
+        System.out.println("===Επεξεργασία πελατών===");
+        System.out.println("Εισάγετε κωδικό πελάτη για επεξεργασία: ");
+        String customerId = scanner.nextLine();
+        for (Customer c : allCustomers) {
+            if (c.getCustomerId().equals(customerId)) {
+                System.out.print("Νέο όνομα: ");
+                String newName = scanner.nextLine();
+                c.setCustomerName(newName);
+                System.out.println("Επιτυχής επεξεργασία.");
+                return;
+            }
+        }
+        System.out.println("Ο πελάτης δεν βρέθηκε.");
+    }
+
+    /**
+     * Διαγράφει πελάτη με βάση τον κωδικό.
+     * Ζητάει από τον χρήστη να εισάγει τον κωδικό πελάτη προς διαγραφή.
+     * Εμφανίζει τα στοιχεία του πελάτη αν βρεθεί και ζητά επιβεβαίωση πριν τη διαγραφή.
+     * Ενημερώνει τον χρήστη αν η διαγραφή έγινε ή αν ακυρώθηκε ή αν ο πελάτης δεν βρέθηκε.
+     */
+    public void deleteCustomer() {
+        System.out.println("===Διαγραφή πελατών===");
+        System.out.println("Εισάγετε κωδικό πελάτη για διαγραφή: ");
+        String customerId = scanner.nextLine();
+        boolean found = false;
+
+        for (int i = 0; i < allCustomers.size(); i++) {
+            Customer tmp = allCustomers.get(i);
+            if (tmp.getCustomerId().equals(customerId)) {
+                found = true;
+                System.out.println("Βρέθηκε πελάτης με τα στοιχεία: " + tmp.toString());
+                System.out.println("Θέλετε σίγουρα να τον διαγράψετε; Ν/Ο");
+                String answer = scanner.nextLine();
+                if (answer.equalsIgnoreCase("Ν")) {
+                    allCustomers.remove(i);
+                    System.out.println("Επιτυχής διαγραφή πελάτη!");
+                    return;
+                } else {
+                    System.out.println("Η διαγραφή ακυρώθηκε. ");
+                    return;
+                }
+
+
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν βρέθηκε πελάτης με αυτόν τον κωδικό.");
+        }
+    }
+
+    /**
+     * Εμφανίζει όλους τους πελάτες που υπάρχουν στη λίστα.
+     * Αν η λίστα είναι κενή, εμφανίζει κατάλληλο μήνυμα.
+     */
+    public void showAllCustomers() {
+        System.out.println("===Εμφάνιση πελατών===");
+        if (allCustomers.isEmpty()) {
+            System.out.println("Η λίστα πελατών είναι άδεια.");
+        } else {
+            for (Customer tmp : allCustomers) {
+                System.out.println(tmp);
+            }
+        }
+    }
+
+    /**
+     * Αποθηκεύει τα δεδομένα των πελατών σε αρχείο CSV.
+     * Σε περίπτωση σφάλματος κατά την αποθήκευση, εμφανίζει μήνυμα λάθους
+     * και στην περίπτωση σοβαρού σφάλματος τερματίζει την εφαρμογή.
+     */
+    public void saveData() {
+        try (PrintWriter pr = new PrintWriter(new FileWriter("data/customers.csv"))) {
+            for (Customer tmp : allCustomers) {
+                pr.println(tmp.toCsvLine());
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Σφάλμα αποθήκευσης αρχείου");
+            System.exit(0);
+        } catch (IOException e) {
+            Logger.getLogger(CustomerManager.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+
+    /**
+     * Φορτώνει τα δεδομένα πελατών από το αρχείο CSV..
+     * Σε περίπτωση που το αρχείο δεν βρεθεί ή προκύψει σφάλμα εισόδου/εξόδου,
+     * εμφανίζει κατάλληλο μήνυμα.
+     * Στο τέλος εμφανίζει μήνυμα επιτυχούς φόρτωσης.
+     */
+    public void loadCustomers() {
+        String line = null;
+        String[] array;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data/customers.csv")))) {
+            while ((line = br.readLine()) != null) {
+                array = line.split(",");
+                String customerId = array[0];
+                String customerName = array[1];
+                Customer c = new Customer(customerId, customerName);
+                allCustomers.add(c);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Σφάλμα φόρτωσης αρχείου");
+        } catch (IOException e) {
+            System.out.println("Σφάλμα εισόδου/εξόδου");
+        }
+        System.out.println("Επιτυχής φόρτωση δεδομένων");
+    }
+}

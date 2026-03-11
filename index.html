@@ -1,0 +1,117 @@
+package model;
+
+/**
+ *  Η κλάση Reservation αναπαριστά μια κράτηση εισιτηρίων για μια παράσταση.
+ */
+public class Reservation {
+    private String reservationId;
+    private String customerId;
+    private String performanceId;
+    private int seats;
+
+    /**
+     * Προεπιλεγμένος κατασκευαστής χωρίς παραμέτρους.
+     */
+    public Reservation() {
+
+    }
+
+    /**
+     * Κατασκευαστής που αρχικοποιεί μια κράτηση με τα αντίστοιχα στοιχεία.
+     *
+     * @param reservationId Μοναδικός κωδικός της κράτησης
+     * @param customerId    Αναγνωριστικό του πελάτη
+     * @param performanceId Αναγνωριστικό της παράστασης
+     * @param seats         Αριθμός θέσεων που κρατούνται
+     */
+    public Reservation(String reservationId, String customerId, String performanceId, int seats) {
+        this.reservationId = reservationId;
+        this.customerId = customerId;
+        this.performanceId = performanceId;
+        this.seats = seats;
+    }
+
+
+    /**
+     * Επιστρέφει τον κωδικό της κράτησης.
+     *
+     * @return ο κωδικός κράτησης
+     */
+    public String getReservationId() {
+        return reservationId;
+    }
+
+    /**
+     * Ορίζει τον κωδικό της κράτησης.
+     *
+     * @param reservationId νέος κωδικός κράτησης
+     */
+    public void setReservationId(String reservationId) {
+        this.reservationId = reservationId;
+    }
+
+    /**
+     * Επιστρέφει τον κωδικό του πελάτη που έκανε την κράτηση.
+     *
+     * @return ο κωδικός πελάτη
+     */
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    /**
+     * Ορίζει τον κωδικό του πελάτη που έκανε την κράτηση.
+     *
+     * @param customerId νέος κωδικός πελάτη
+     */
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    /**
+     * Επιστρέφει τον κωδικό της παράστασης για την οποία έγινε η κράτηση.
+     *
+     * @return ο κωδικός παράστασης
+     */
+    public String getPerformanceId() {
+        return performanceId;
+    }
+
+    /**
+     * Ορίζει τον κωδικό της παράστασης.
+     *
+     * @param performanceId νέος κωδικός παράστασης
+     */
+    public void setPerformanceId(String performanceId) {
+        this.performanceId = performanceId;
+    }
+
+    /**
+     * Επιστρέφει τον αριθμό των θέσεων που κρατήθηκαν.
+     *
+     * @return αριθμός θέσεων
+     */
+    public int getSeats() {
+        return seats;
+    }
+
+    /**
+     * Ορίζει τον αριθμό των θέσεων της κράτησης.
+     *
+     * @param seats νέος αριθμός θέσεων
+     */
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+
+    /**
+     * Επιστρέφει μια συμβολοσειρά που περιγράφει συνοπτικά την κράτηση.
+     *
+     * @return περιγραφή της κράτησης
+     */
+    @Override
+    public String toString() {
+        return "Κράτηση " + reservationId + " | Πελάτης " + customerId + " | Παράσταση " + performanceId +
+                "| Αριθμός θέσεων " + seats;
+    }
+}

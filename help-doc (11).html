@@ -1,0 +1,461 @@
+package model;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Η κλάση PerformanceManager διαχειρίζεται μουσικές και θεατρικές παραστάσεις.
+ * Παρέχει μεθόδους για την εισαγωγή, επεξεργασία, διαγραφή και εμφάνιση
+ * των παραστάσεων, καθώς και για αποθήκευση και φόρτωση των δεδομένων από αρχεία.
+ */
+public class PerformanceManager {
+    Scanner scanner;
+    private ArrayList<Performance> allPerformances; //λίστα θεατρικών και μουσικών παραστάσεων
+
+    /**
+     * Κατασκευαστής της κλάσης, αρχικοποιεί τον Scanner και τη λίστα παραστάσεων.
+     */
+    public PerformanceManager() {
+        scanner = new Scanner(System.in);
+        allPerformances = new ArrayList<Performance>();
+    }
+
+    /**
+     * Εμφανίζει το κύριο μενού διαχείρισης παραστάσεων και εκτελεί τις αντίστοιχες ενέργειες
+     * ανάλογα με την επιλογή του χρήστη.
+     */
+    public void performanceMenu() {
+        int choice;
+        do {
+            System.out.println("\n===ΜΕΝΟΥ ΠΑΡΑΣΤΑΣΕΩΝ===");
+            System.out.println("1. Θεατρικές Παραστάσεις");
+            System.out.println("2. Μουσικές Παραστάσεις");
+            System.out.println("3. Έξοδος");
+            System.out.print("Παρακαλώ επιλέξτε μια ενέργεια: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    theatricalSubMenu();
+                    break;
+                case 2:
+                    musicalSubMenu();
+                    break;
+                case 3:
+                    System.out.println("Έξοδος από το μενού.");
+                    break;
+                default:
+                    System.out.println("Μη έγκυρη επιλογή.");
+            }
+        } while (choice != 3);
+    }
+
+    /**
+     * Εμφανίζει το υπομενού διαχείρισης θεατρικών παραστάσεων και εκτελεί τις επιλογές του χρήστη.
+     */
+    public void theatricalSubMenu() {
+        int choice;
+        do {
+            System.out.println("\n===ΔΙΑΧΕΙΡΙΣΗ ΘΕΑΤΡΙΚΩΝ ΠΑΡΑΣΤΑΣΕΩΝ===");
+            System.out.println("1. Εισαγωγή θεατρικών παραστάσεων");
+            System.out.println("2. Επεξεργασία θεατρικών παραστάσεων");
+            System.out.println("3. Διαγραφή θεατρικών παραστάσεων");
+            System.out.println("4. Εμφάνιση θεατρικών παραστάσεων");
+            System.out.println("0. Έξοδος");
+            System.out.println("Παρακαλώ επιλέξτε μια ενέργεια ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addTheatricalPerformance();
+                    break;
+                case 2:
+                    editTheatricalPerformance();
+                    break;
+                case 3:
+                    deleteTheatricalPerformance();
+                    break;
+                case 4:
+                    showTheatricalPerformance();
+                case 0:
+                    System.out.println("Έξοδος από το μενού.");
+                    break;
+                default:
+                    System.out.println("Μη έγκυρη επιλογή.");
+
+            }
+
+        } while (choice != 0);
+    }
+
+    /**
+     * Εμφανίζει το υπομενού διαχείρισης μουσικών παραστάσεων και εκτελεί τις επιλογές του χρήστη.
+     */
+    public void musicalSubMenu() {
+        int choice;
+        do {
+            System.out.println("\n===ΔΙΑΧΕΙΡΙΣΗ ΜΟΥΣΙΚΩΝ ΠΑΡΑΣΤΑΣΕΩΝ===");
+            System.out.println("1. Εισαγωγή μουσικών παραστάσεων");
+            System.out.println("2. Επεξεργασία μουσικών παραστάσεων");
+            System.out.println("3. Διαγραφή μουσικών παραστάσεων");
+            System.out.println("4. Εμφάνιση μουσικών παραστάσεων");
+            System.out.println("0. Έξοδος");
+            System.out.println("Παρακαλώ επιλέξτε μια ενέργεια ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addMusicalPerformance();
+                    break;
+                case 2:
+                    editMusicalPerformance();
+                    break;
+                case 3:
+                    deleteMusicalPerformance();
+                    break;
+                case 4:
+                    showMusicalPerformance();
+                    break;
+                case 0:
+                    System.out.println("Έξοδος από το μενού. ");
+                    break;
+                default:
+                    System.out.println("Μη έγκυρη επιλογή.");
+
+            }
+
+        } while (choice != 4);
+    }
+
+    //Μέθοδοι θεατρικών παραστάσεων
+
+    /**
+     * Προσθέτει νέα θεατρική παράσταση μετά από εισαγωγή στοιχείων από τον χρήστη.
+     * Ελέγχει αν υπάρχει ήδη παράσταση με τον ίδιο κωδικό.
+     */
+    public void addTheatricalPerformance() {
+        System.out.println("===ΕΙΣΑΓΩΓΗ ΘΕΑΤΡΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό: ");
+        String id = scanner.nextLine();
+        for (Performance tmp : allPerformances) {
+            if (tmp.getId().equals(id)) {
+                System.out.println("Υπάρχει ήδη παράσταση με αυτόν τον κωδικό ");
+                return;
+            }
+        }
+        System.out.println("Εισάγετε τίτλο: ");
+        String title = scanner.nextLine();
+        System.out.println("Εισάγετε πρωταγωνιστή: ");
+        String mainCharacter = scanner.nextLine();
+        System.out.println("Εισάγετε χώρο: ");
+        String venue = scanner.nextLine();
+        System.out.println("Εισάγετε ημερομηνία: ");
+        String date = scanner.nextLine();
+
+        //δημιουργία αντικειμένου τύπου TheatricalPerformance
+        TheatricalPerformance tmp = new TheatricalPerformance(id, title, venue, date, mainCharacter);
+        allPerformances.add(tmp);
+        System.out.println("Επιτυχής εισαγωγή! \n ");
+
+    }
+
+    /**
+     * Επεξεργάζεται μια υπάρχουσα θεατρική παράσταση με βάση τον κωδικό της.
+     * Ο χρήστης μπορεί να τροποποιήσει τα πεδία ή να τα αφήσει ίδια.
+     */
+    public void editTheatricalPerformance() {
+        System.out.println("===ΕΠΕΞΕΡΓΑΣΙΑ ΘΕΑΤΡΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό της παράστασης για επεξεργασία: ");
+        String id = scanner.nextLine();
+        for (Performance tmp : allPerformances) {
+            if (tmp instanceof TheatricalPerformance && tmp.getId().equals(id)) {
+                System.out.println("Τρέχουσα θεατρική παράσταση: \n" + tmp.toString());
+                System.out.println("Εισάγετε νέο τίτλο ή πατήστε enter για να μην αλλάξει: ");
+                String newTitle = scanner.nextLine();
+                if (!newTitle.equals("")) {
+                    tmp.setTitle(newTitle);
+                }
+                System.out.println("Εισάγετε νέο πρωταγωνιστή ή πατήστε enter για να μην αλλάξει: ");
+                String newMainCharacter = scanner.nextLine();
+                if (!newMainCharacter.equals("")) {
+                    ((TheatricalPerformance) tmp).setMainCharacter(newMainCharacter);
+                }
+                System.out.println("Εισάγετε νέο χώρο ή πατήστε enter για να μην αλλάξει: ");
+                String newVenue = scanner.nextLine();
+                if (!newVenue.equals("")) {
+                    tmp.setVenue(newVenue);
+                }
+                System.out.println("Εισάγετε νέα ημερομηνία ή πατήστε enter για να μην αλλάξει: ");
+                String newDate = scanner.nextLine();
+                if (!newDate.equals("")) {
+                    tmp.setDate(newDate);
+                }
+
+                System.out.println("Η επεξεργασία ολοκληρώθηκε με επιτυχία!");
+                return;
+
+            }
+
+        }
+        System.out.println("Δεν βρέθηκε θεατρική παράσταση με αυτόν τον κωδικό.");
+    }
+
+    /**
+     * Διαγράφει μια θεατρική παράσταση με βάση τον κωδικό της,
+     * μετά από επιβεβαίωση του χρήστη.
+     */
+    public void deleteTheatricalPerformance() {
+        System.out.println("===ΔΙΑΓΡΑΦΗ ΘΕΑΤΡΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό παράστασης για διαγραφή: ");
+        String id = scanner.nextLine();
+        boolean found = false;
+
+        for (int i = 0; i < allPerformances.size(); i++) {
+            Performance tmp = allPerformances.get(i);
+            if (tmp instanceof TheatricalPerformance && tmp.getId().equals(id)) {
+                found = true;
+                System.out.println("Βρέθηκε παράσταση με τα στοιχεία: " + tmp.toString());
+                System.out.println("Θέλετε σίγουρα να τη διαγράψετε; Ν/Ο");
+                String answer = scanner.nextLine();
+                if (answer.equalsIgnoreCase("Ν")) {
+                    allPerformances.remove(i);
+                    System.out.println("Επιτυχής διαγραφή παράστασης!");
+                    return;
+                } else {
+                    System.out.println("Η διαγραφή ακυρώθηκε. ");
+                    return;
+                }
+
+
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν βρέθηκε θεατρική παράσταση με αυτόν τον κωδικό.");
+        }
+    }
+
+    /**
+     * Εμφανίζει τη λίστα με όλες τις θεατρικές παραστάσεις που υπάρχουν στη μνήμη.
+     */
+    public void showTheatricalPerformance() {
+        System.out.println("\n===ΛΙΣΤΑ ΘΕΑΤΡΙΚΩΝ ΠΑΡΑΣΤΑΣΕΩΝ===");
+        boolean found = false;
+        for (Performance p : allPerformances) {
+            if (p instanceof TheatricalPerformance) {
+                System.out.println(p);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν υπάρχουν θεατρικές παραστάσεις.");
+        }
+    }
+
+    //Μέθοδοι μουσικών παραστάσεων
+
+    /**
+     * Προσθέτει νέα μουσική παράσταση μετά από εισαγωγή στοιχείων από τον χρήστη.
+     * Ελέγχει αν υπάρχει ήδη παράσταση με τον ίδιο κωδικό.
+     */
+    public void addMusicalPerformance() {
+        System.out.println("===ΕΙΣΑΓΩΓΗ ΜΟΥΣΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό: ");
+        String id = scanner.nextLine();
+        for (Performance tmp : allPerformances) {
+            if (tmp.getId().equals(id)) {
+                System.out.println("Υπάρχει ήδη παράσταση με αυτόν τον κωδικό. ");
+                return;
+            }
+        }
+        System.out.println("Εισάγετε τίτλο: ");
+        String title = scanner.nextLine();
+        System.out.println("Εισάγετε τραγουδιστή: ");
+        String singer = scanner.nextLine();
+        System.out.println("Εισάγετε χώρο: ");
+        String venue = scanner.nextLine();
+        System.out.println("Εισάγετε ημερομηνία: ");
+        String date = scanner.nextLine();
+
+        //δημιουργία αντικειμένου τύπου MusicalPerformance
+        MusicalPerformance tmp = new MusicalPerformance(id, title, venue, date, singer);
+        allPerformances.add(tmp);
+        System.out.println("Επιτυχής εισαγωγή! \n ");
+
+    }
+
+    /**
+     * Επεξεργάζεται μια υπάρχουσα μουσική παράσταση με βάση τον κωδικό της.
+     * Ο χρήστης μπορεί να τροποποιήσει τα πεδία ή να τα αφήσει ίδια.
+     */
+    public void editMusicalPerformance() {
+        System.out.println("===ΕΠΕΞΕΡΓΑΣΙΑ ΜΟΥΣΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό της παράστασης για επεξεργασία: ");
+        String id = scanner.nextLine();
+        for (Performance tmp : allPerformances) {
+            if (tmp instanceof MusicalPerformance && tmp.getId().equals(id)) {
+                System.out.println("Τρέχουσα μουσική παράσταση: \n" + tmp.toString());
+                System.out.println("Εισάγετε νέο τίτλο ή πατήστε enter για να μην αλλάξει: ");
+                String newTitle = scanner.nextLine();
+                if (!newTitle.equals("")) {
+                    tmp.setTitle(newTitle);
+                }
+                System.out.println("Εισάγετε νέο τραγουδιστή ή πατήστε enter για να μην αλλάξει: ");
+                String newSinger = scanner.nextLine();
+                if (!newSinger.equals("")) {
+                    ((MusicalPerformance) tmp).setSinger(newSinger);
+                }
+                System.out.println("Εισάγετε νέο χώρο ή πατήστε enter για να μην αλλάξει: ");
+                String newVenue = scanner.nextLine();
+                if (!newVenue.equals("")) {
+                    tmp.setVenue(newVenue);
+                }
+                System.out.println("Εισάγετε νέα ημερομηνία ή πατήστε enter για να μην αλλάξει: ");
+                String newDate = scanner.nextLine();
+                if (!newDate.equals("")) {
+                    tmp.setDate(newDate);
+                }
+
+                System.out.println("Η επεξεργασία ολοκληρώθηκε με επιτυχία!");
+                return;
+
+            }
+
+        }
+        System.out.println("Δεν βρέθηκε μουσική παράσταση με αυτόν τον κωδικό.");
+    }
+
+    /**
+     * Διαγράφει μια μουσική παράσταση με βάση τον κωδικό της,
+     * μετά από επιβεβαίωση του χρήστη.
+     */
+    public void deleteMusicalPerformance() {
+        System.out.println("===ΔΙΑΓΡΑΦΗ ΜΟΥΣΙΚΗΣ ΠΑΡΑΣΤΑΣΗΣ===");
+        System.out.println("Εισάγετε κωδικό παράστασης για διαγραφή: ");
+        String id = scanner.nextLine();
+        boolean found = false;
+
+        for (int i = 0; i < allPerformances.size(); i++) {
+            Performance tmp = allPerformances.get(i);
+            if (tmp instanceof MusicalPerformance && tmp.getId().equals(id)) {
+                System.out.println("Βρέθηκε παράσταση με τα στοιχεία: " + tmp.toString());
+                System.out.println("Θέλετε σίγουρα να τη διαγράψετε; Ν/Ο");
+                String answer = scanner.nextLine();
+                if (answer.equalsIgnoreCase("Ν")) {
+                    allPerformances.remove(i);
+                    System.out.println("Επιτυχής διαγραφή παράστασης!");
+                    return;
+                } else {
+                    System.out.println("Η διαγραφή ακυρώθηκε. ");
+                    return;
+                }
+
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν βρέθηκε μουσική παράσταση με αυτόν τον κωδικό.");
+        }
+
+    }
+
+    /**
+     * Εμφανίζει τη λίστα με όλες τις μουσικές παραστάσεις που υπάρχουν στη μνήμη.
+     */
+    public void showMusicalPerformance() {
+        System.out.println("\n===ΛΙΣΤΑ ΜΟΥΣΙΚΩΝ ΠΑΡΑΣΤΑΣΕΩΝ===");
+        boolean found = false;
+        for (Performance p : allPerformances) {
+            if (p instanceof MusicalPerformance) {
+                System.out.println(p);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Δεν υπάρχουν μουσικές παραστάσεις.");
+        }
+    }
+
+    /**
+     * Αποθηκεύει τις παραστάσεις σε αρχεία CSV.
+     * Θεατρικές παραστάσεις αποθηκεύονται στο αρχείο "theatrical_performances.csv"
+     * και μουσικές στο "musical_performances.csv".
+     */
+    public void saveData() {
+        try (PrintWriter prTheatrical = new PrintWriter(new FileWriter("data/theatrical_performances.csv"));
+             PrintWriter prMusical = new PrintWriter(new FileWriter("data/musical_performances.csv"))) {
+
+            for (Performance tmp : allPerformances) {
+                if (tmp instanceof TheatricalPerformance) {
+                    prTheatrical.println(((TheatricalPerformance) tmp).toCsvLine());
+                } else if (tmp instanceof MusicalPerformance) {
+                    prMusical.println(((MusicalPerformance) tmp).toCsvLine());
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Σφάλμα αποθήκευσης αρχείου");
+            System.exit(0);
+        } catch (IOException e) {
+            Logger.getLogger(PerformanceManager.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    /**
+     * Μέθοδος φόρτωσης θεατρικών παραστάσεων από το αρχείο "data/theatrical_performances.csv".
+     * Διαβάζει γραμμή-γραμμή, δημιουργεί αντικείμενα TheatricalPerformance και τα προσθέτει στη λίστα allPerformances.
+     */
+    public void loadTheatricalPerformances() {
+        String line = null;
+        try (BufferedReader br = new BufferedReader(new FileReader("data/theatrical_performances.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] array = line.split(",");
+                String id = array[0];
+                String title = array[1];
+                String mainCharacter = array[2];
+                String venue = array[3];
+                String date = array[4];
+
+                TheatricalPerformance tp = new TheatricalPerformance(id, title, venue, date, mainCharacter);
+                allPerformances.add(tp);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Σφάλμα φόρτωσης αρχείου");
+        } catch (IOException e) {
+            System.out.println("Σφάλμα εισόδου/εξόδου");
+        }
+        System.out.println("Επιτυχής φόρτωση δεδομένων");
+
+    }
+
+    /**
+     * Μέθοδος φόρτωσης μουσικών παραστάσεων από το αρχείο "data/musical_performances.csv".
+     * Διαβάζει γραμμή-γραμμή, δημιουργεί αντικείμενα MusicalPerformance και τα προσθέτει στη λίστα allPerformances.
+     */
+    public void loadMusicalPerformances() {
+        String line;
+        try (BufferedReader br = new BufferedReader(new FileReader("data/musical_performances.csv"))) {
+            while ((line = br.readLine()) != null) {
+                String[] array = line.split(",");
+                String id = array[0];
+                String title = array[1];
+                String singer = array[2];
+                String venue = array[3];
+                String date = array[4];
+
+                MusicalPerformance mp = new MusicalPerformance(id, title, venue, date, singer);
+                allPerformances.add(mp);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Σφάλμα φόρτωσης αρχείου");
+        } catch (IOException e) {
+            System.out.println("Σφάλμα εισόδου/εξόδου");
+        }
+        System.out.println("Επιτυχής φόρτωση δεδομένων");
+    }
+
+}

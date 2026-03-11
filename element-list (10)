@@ -1,0 +1,119 @@
+package model;
+
+/**
+ * Η κλάση Performance αναπαριστά ένα γενικό καλλιτεχνικό δρώμενο.
+ * Περιλαμβάνει κοινά χαρακτηριστικά (κωδικός, τίτλος, χώρος, ημερομηνία)
+ * για αυτό αποτελεί υπερκλάση η οποία κληρονομείται.
+ */
+public class Performance {
+    private String id; //κωδικός παράστασης
+    private String title; //τίτλος παράστασης
+    private String venue; //χώρος παράστασης
+    private String date; //ημερομηνία παράστασης
+
+    /**
+     * Προεπιλεγμένος κατασκευαστής χωρίς παραμέτρους.
+     */
+    public Performance() {
+
+    }
+
+    /**
+     * Κατασκευαστής που αρχικοποιεί τα πεδία της παράστασης.
+     *
+     * @param id     Κωδικός της παράστασης
+     * @param title  Τίτλος της παράστασης
+     * @param venue  Χώρος διεξαγωγής της παράστασης
+     * @param date   Ημερομηνία της παράστασης
+     */
+     public Performance(String id, String title, String venue, String date) {
+        this.id = id;
+        this.title = title;
+        this.venue = venue;
+        this.date = date;
+    }
+
+
+
+    /**
+     * Επιστρέφει τον κωδικό της παράστασης.
+     *
+     * @return ο κωδικός παράστασης
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Ορίζει τον κωδικό της παράστασης.
+     *
+     * @param id νέος κωδικός παράστασης
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Επιστρέφει τον τίτλο της παράστασης.
+     *
+     * @return ο τίτλος της παράστασης
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Ορίζει τον τίτλο της παράστασης.
+     *
+     * @param title νέος τίτλος παράστασης
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Επιστρέφει τον χώρο διεξαγωγής της παράστασης.
+     *
+     * @return ο χώρος της παράστασης
+     */
+    public String getVenue() {
+        return venue;
+    }
+
+    /**
+     * Ορίζει τον χώρο διεξαγωγής της παράστασης.
+     *
+     * @param venue νέος χώρος παράστασης
+     */
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    /**
+     * Επιστρέφει την ημερομηνία της παράστασης.
+     *
+     * @return η ημερομηνία της παράστασης
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * Ορίζει την ημερομηνία της παράστασης.
+     *
+     * @param date νέα ημερομηνία παράστασης
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     * Επιστρέφει αναπαράσταση της παράστασης σε μορφή κειμένου.
+     *
+     * @return συμβολοσειρά με τα βασικά στοιχεία της παράστασης
+     */
+    @Override
+    public String toString() {
+    return "Κωδικός: " + id + ", Τίτλος: " + title + ", Χώρος: " + venue + ", Ημερομηνία: " + date;
+    }
+}

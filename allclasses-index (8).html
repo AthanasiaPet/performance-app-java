@@ -1,0 +1,73 @@
+package model;
+
+/**
+ * Η κλάση Musical Performance (μουσική παράσταση) κληρονομεί
+ * τα attributes της υπερκλάσης Performance
+ * και προσθέτει το πεδίο του τραγουδιστή
+ */
+public class MusicalPerformance extends Performance{
+    private String singer;
+
+    /**
+     * Προεπιλεγμένος κατασκευαστής που καλεί τον αντίστοιχο της υπερκλάσης.
+     */
+    public MusicalPerformance() {
+        super();
+    }
+
+    /**
+     * Κατασκευαστής που δημιουργεί αντικείμενο μουσικής παράστασης με όλα τα πεδία.
+     *
+     * @param id Κωδικός ή αναγνωριστικό παράστασης
+     * @param title Τίτλος της παράστασης
+     * @param venue Χώρος διεξαγωγής της παράστασης
+     * @param date Ημερομηνία διεξαγωγής της παράστασης
+     * @param singer Όνομα τραγουδιστή της παράστασης
+     */
+    public MusicalPerformance(String id, String title, String venue, String date, String singer) {
+        super(id, title, venue, date);
+        this.singer = singer;
+    }
+
+
+    /**
+     * Επιστρέφει το όνομα του τραγουδιστή.
+     *
+     * @return Το όνομα του τραγουδιστή
+     */
+    public String getSinger() {
+        return singer;
+    }
+
+    /**
+     * Ορίζει το όνομα του τραγουδιστή.
+     *
+     * @param singer Το νέο όνομα τραγουδιστή
+     */
+    public void setSinger(String singer) {
+        this.singer = singer;
+    }
+
+
+    /**
+     * Επιστρέφει αναπαράσταση της μουσικής παράστασης σε μορφή κειμένου.
+     *
+     * @return Σύντομη περιγραφή της παράστασης μαζί με το όνομα τραγουδιστή
+     */
+    @Override
+    public String toString() {
+        return super.toString() + ", Τραγουδιστής: " + singer;
+    }
+
+    /**
+     * Δημιουργεί μια γραμμή CSV για την αποθήκευση της μουσικής παράστασης.
+     *
+     * @return Μορφοποιημένη γραμμή CSV με τα πεδία της παράστασης
+     */
+    public String toCsvLine ()
+    {
+        String Lin = super.getId() + "," + super.getTitle() + "," + singer + "," + super.getVenue()
+                + "," + super.getDate();
+        return Lin;
+    }
+}

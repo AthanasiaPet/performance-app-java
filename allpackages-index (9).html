@@ -1,0 +1,36 @@
+package model;
+/**
+ * Η κλάση MusicalReservation αναπαριστά μια κράτηση
+ * για μουσική παράσταση και κληρονομεί από την υπερκλάση Reservation.
+ */
+public class MusicalReservation extends Reservation{
+
+    public MusicalReservation() {
+
+    }
+
+    /**
+     * Κατασκευαστής της κλάσης MusicalReservation
+     * όπου καλεί τον κατασκευαστή της υπερκλάσης Reservation
+     * @param reservationId μοναδικός κωδικός κράτησης
+     * @param customerId    κωδικός πελάτη
+     * @param performanceId κωδικός παράστασης
+     * @param seats         αριθμός θέσεων
+     */
+    public MusicalReservation(String reservationId, String customerId, String performanceId, int seats) {
+        super(reservationId, customerId, performanceId, seats);
+    }
+
+
+    /**
+     * Επιστρέφει μια αναπαράσταση της κράτησης ως κείμενο,
+     * προσθέτοντας ότι πρόκειται για μουσική παράσταση.
+     *
+     * @return Περιγραφή της κράτησης με τύπο παράστασης
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " | Τύπος παράστασης: Μουσική";
+    }
+
+}
